@@ -12,15 +12,16 @@ phases:
   build:
     commands:
       - echo Building the Docker image...
-      - docker build -t ijse_ai_test .
-      - echo Tagging the Docker image...
-      - docker tag ijse_ai_test:latest 975050048882.dkr.ecr.ap-southeast-1.amazonaws.com/ijse_ai_test:latest
+      - docker build -t ijse_ai_test:green .
+      - echo Tagging the previous green image as blue...
+      - docker tag ijse_ai_test:green 975050048882.dkr.ecr.ap-southeast-1.amazonaws.com/ijse_ai_test:blue
   post_build:
     commands:
       - echo Pushing the Docker image to ECR...
-      - docker push 975050048882.dkr.ecr.ap-southeast-1.amazonaws.com/ijse_ai_test:latest
+      - docker push 975050048882.dkr.ecr.ap-southeast-1.amazonaws.com/ijse_ai_test:green
+      - docker push 975050048882.dkr.ecr.ap-southeast-1.amazonaws.com/ijse_ai_test:blue
       - echo Writing image definitions file...
-      - printf '[{"name":"mywebsite","imageUri":"%s"}]' 975050048882.dkr.ecr.ap-southeast-1.amazonaws.com/ijse_ai_test:latest > imagedefinitions.json
+      - printf '[{"name":"mywebsite","imageUri":"%s"}]' 975050048882.dkr.ecr.ap-southeast-1.amazonaws.com/ijse_ai_test:blue > imagedefinitions.json
 
 artifacts:
   files:
